@@ -31,3 +31,7 @@ Mille Borne is a French card game that the player tries to reach a goal distance
   set to true and if they don't have any speed limit set to true.  If speed limit is set to true limit the distance card able to be played to a distance lower than speed limit until a remedy is played.
 * If a safety card is played all hazard cards of that category will not have any effect
 * When a player has traveled the goal distance they are declared the winner.
+***
+Wireframe
+[Wireframe #1](https://wireframe.cc/pro/pp/4fba55bc7723373)
+[Wireframe #2](https://wireframe.cc/pro/edit/723374)
