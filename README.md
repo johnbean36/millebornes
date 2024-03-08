@@ -11,6 +11,7 @@ Mille Borne is a French card game that the player tries to reach a goal distance
 ***
 ##Credits:
 ***
+The Parker Brothers instruction manual for Mille Bornes
 ##Pseudocode
 * Code the layout for the card game in HTML and CSS
 * Create a rules page linked to the main game page
@@ -32,6 +33,7 @@ Mille Borne is a French card game that the player tries to reach a goal distance
 * If a safety card is played all hazard cards of that category will not have any effect
 * When a player has traveled the goal distance they are declared the winner.
 ***
-Wireframe
+#Wireframe
 [Wireframe #1](https://wireframe.cc/pro/pp/4fba55bc7723373)
+  
 [Wireframe #2](https://wireframe.cc/pro/edit/723374)

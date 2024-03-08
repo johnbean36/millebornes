@@ -1,0 +1,19 @@
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    height: 100vh;
+    background-color: #00acef;
+    display: flex;
+    flex-direction: column;  
+}
+
+footer {
+    margin-top: auto;
+    align-items: flex-end;
+    background-color: white;
+}
