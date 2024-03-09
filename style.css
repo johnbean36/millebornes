@@ -3,19 +3,100 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #00acef;
 }
 
 body {
     height: 100vh;
+    display: grid;
+    grid-template-rows: 0.1fr 1.5fr 0.6fr;
     background-color: #00acef;
-    display: flex;
-    flex-direction: column;  
-    align-items: center;
-    justify-content: center;
 }
 
-footer {
-    margin-top: auto;
-    align-items: flex-end;
+main {
     background-color: white;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
+
+#a {
+    background-color: #00acef;
+}
+
+ #board {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: solid black;
+    width: 33vmin;
+    height: 40vmin;
+    margin-top: 5vmin;
+    margin-left: 5vmin;
+    background-color: grey;
+}
+
+.score {
+    display: grid;
+    grid-template-columns: 1fr 0.5fr;
+    background-color: #c0c0c0;
+    margin: 0.7vmin;
+    padding: 1vmin;
+    border: solid black;
+    height: 2.5vmin;
+    width: 29vmin;
+    font-size: 1.4em;
+}
+
+.row2 {
+    border: inset;
+    text-align: center;
+    height: 2.3vmin;
+    width: 7vmin;
+    margin: auto;
+}
+
+#b {
+    background-color:#00acef;
+    display: grid;
+    grid-template-rows: 1fr 0.5fr;
+}
+
+#btop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 5vmin;
+}
+
+#discard {
+    opacity: 50%;
+    background-color: grey;
+    height: 216px;
+    width: 148px;
+}
+
+#c {
+    background-color: #00acef;
+}
+
+
+footer {
+    background-color: #00acef;
+}
+
+
+
+
+
+
+
+
+
+
