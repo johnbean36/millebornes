@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet">
-    <script href="scrypt.js"></script>
+    <script defer src="script.js"></script>
     <title>A Mille Bornes Game</title>
 </head>
 <body>
@@ -44,6 +44,7 @@
         <section id="b">
             <div id="btop">
                 <div class="cards">
+                    <div>Deck of cards</div>
                     <img src="./images/backofdeck.png">
                 </div>
                 <div class="cards">
@@ -51,13 +52,86 @@
                 </div>
             </div>
             <div id="bbottom">
-                <span>Tip messages</span>
+                <span id="tips"></span>
             </div>
         </section>
 
-        <section id="c">hello</section>
+        <section id="c">
+            <div class="indicators">
+                <span class="ind" id="haz">Hazards Played</span>
+                <div class="indacc">
+                    <div>Accident:</div>
+                    <div class="ind">Player 1</div>
+                    <img class="light" id="p1a" src="./images/light.png">
+                    <div class="ind">Player 2</div>
+                    <img class="light" id="p2a" src="./images/light.png">
+                </div>
+                <div class="indacc">
+                    <div>Out of Gas:</div>
+                    <div class="ind">Player 1</div>
+                    <img class="light" id="p1o" src="./images/light.png">
+                    <div class="ind">Player 2</div>
+                    <img class="light" id="p2o" src="./images/light.png">
+                </div>
+                <div class="indacc">
+                    <div>Stop:</div>
+                    <div class="ind">Player 1</div>
+                    <img class="light" id="p1o" src="./images/light.png">
+                    <div class="ind">Player 2</div>
+                    <img class="light" id="p1o" src="./images/light.png">
+                </div>
+                <div class="indacc">
+                    <div>Flat Tire:</div>
+                    <div class="ind">Player 1</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                    <div class="ind">Player 2</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                </div>
+                <div class="indacc">
+                    <div>Speed Limit</div>
+                    <div class="ind">Player 1</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                    <div class="ind">Player 2</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                </div>
+                <span>Safeties played</span>
+                <div class="indacc">
+                    <div id="ev">Emergency Vehicle:</div>
+                    <div class="ind">Player 1</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                    <div class="ind">Player 2</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                </div>
+                <div class="indacc">
+                    <div>Driving Ace:</div>
+                    <div class="ind">Player 1</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                    <div class="ind">Player 2</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                </div>
+                <div class="indacc">
+                    <div>Fuel Truck:</div>
+                    <div class="ind">Player 1</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                    <div class="ind">Player 2</div>
+                    <img class="light" id="p1f" src="./images/light.png">
+                </div>
+            </div>
+        </section>
     </main>
     
-    <footer><img src="./images/25.png"></footer>
+    <footer>
+        <section class="hand">
+            <div id="card1"><img src="./images/25.png"></div>
+            <div id="card2"><img src="./images/50mile.png"></div>
+            <div id="card3"><img src="./images/75mile.png"></div>
+            <div id="card4"><img src="./images/100mile.png"></div>
+            <div id="card5"><img src="./images/200mile.png"></div>
+            <div id="card6"><img src="./images/accident.png"></div>
+        </section>
+        <section id="buttonS">
+            <button type="button" id="bu">Play another game</button>
+        </section>
+    </footer>
 </body>
 </html>

@@ -9,7 +9,7 @@ header {
 body {
     height: 100vh;
     display: grid;
-    grid-template-rows: 0.1fr 1.5fr 0.6fr;
+    grid-template-rows: 0.1fr 1fr 1fr;
     background-color: #00acef;
 }
 
@@ -45,7 +45,7 @@ main {
     border: solid black;
     height: 2.5vmin;
     width: 29vmin;
-    font-size: 1.4em;
+    font-size: 1em;
 }
 
 .row2 {
@@ -62,11 +62,6 @@ main {
     grid-template-rows: 1fr 0.5fr;
 }
 
-#btop {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
 .cards {
     display: flex;
     flex-direction: column;
@@ -74,6 +69,20 @@ main {
     justify-content: center;
     margin: 5vmin;
 }
+
+#btop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#bbottom{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 2vmin;
+    font-style: italic;
+}
+
 
 #discard {
     opacity: 50%;
@@ -84,11 +93,62 @@ main {
 
 #c {
     background-color: #00acef;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
+.indicators {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: solid black;
+    width: 45vmin;
+    height: 55vmin;
+    background-color: grey;
+    margin-right: 3vmin;
+    
+}
 
+.indacc {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+    height: 3.9vmin;
+    width: 35vmin;
+    border: solid black;
+    padding: 0.4vmin;
+    margin: 0.25vmin;
+}
+
+.light {
+    margin-left: 1vmin;
+    padding: 0;
+}
+
+.hand {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#card1, #card2, #card3, #card4, #card5, #card6 {
+    margin: 0.5vmin;
+}
+
+button {
+    height: 4vmin;
+}
+
+#buttonS {
+    margin: 5vmin;
+    display: flex;
+    justify-content: center;
+}
 footer {
     background-color: #00acef;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
 }
 
 
