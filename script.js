@@ -1,3 +1,13 @@
+const buttonEl = document.getElementById("bu");
+buttonEl.disabled = true;
+let cardEl = [];
+let count = 0;
+let turn = 1;
+let cardsPlayed = [];
+let player1Hand = [];
+let player2Hand = [];
+let cardHand = [];
+
 function init() {
     const buttonEl = document.getElementById("bu");
     buttonEl.disabled = true;
@@ -23,8 +33,6 @@ function chooseCard(){
     }
 }
 
-init();
-
 //Numbers of each type of card in Mille Bornes
 const cardNumbers = {
     mile25: 10,
@@ -47,10 +55,14 @@ const cardNumbers = {
     emergencyVehicle: 1
 };
 
+const HANDSIZE = 6;
+
 //Cached elements
-for(i = 1; i <= 6; i++){
+for(i = 1; i <= HANDSIZE; i++){
     cardHand.push(document.getElementById(`card${i}`));
 }
+
+divEl = document.getElementById("hand");
 
 //Creating img objects to put card images into
 for( i in cardNumbers){
@@ -124,11 +136,25 @@ cardEl[count].setAttribute('src', './images/puncture_proof.png');
 count += 1;
 cardEl[count].setAttribute('src', './images/emergency_vehicle.png');
 
+divEl.addEventListener('click', (e) => {
+    const cardIndex = cardEl.indexOf(e.target);
+});
+
 for( let i = 1; i <= 2; i++){
-    for(let j = 0; j < 6; j++){
-        `player${i}Hand`.push(cardEl[chooseCard()]);
+    for(let j = 0; j < HANDSIZE; j++){
+        if(i === 1){
+            player1Hand.push(cardEl[chooseCard()]);
+        }
+        else if(i === 2){
+            player2Hand.push(cardEl[chooseCard()]);
+        }
     }
 }
+
+for (let i = 0; i < HANDSIZE; i++){
+    cardHand[i].appendChild(player1Hand[i]);
+}
+
 
 
 
