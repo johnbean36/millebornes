@@ -145,6 +145,9 @@ button {
     display: flex;
     justify-content: center;
 }
+#hint {
+    text-align: center;
+}
 footer {
     background-color: #00acef;
     display: grid;
