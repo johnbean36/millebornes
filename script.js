@@ -179,6 +179,14 @@ function playerMessage(message){
     //
 }
 
+function cardPlayed(){
+    if(cardsPlayed.length === 99){
+        winner = true;
+        determineWinner();
+    }
+}
+
+
 
 //Numbers of each type of card in Mille Bornes
 const cardNumbers = {
@@ -326,6 +334,7 @@ divEl.addEventListener('click', (e) => {
             player1Go = true;
             //turn on player1go light
             removeFromHand(cardEl[cardIndex], player1Hand);
+            cardsPlayed();
             turn = 2;
             clearHand();
             newHand(turn);
@@ -350,6 +359,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -369,6 +379,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -388,6 +399,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -407,6 +419,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -431,6 +444,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -450,6 +464,7 @@ divEl.addEventListener('click', (e) => {
             accidentL = document.getElementById('p2a');
             accidentL.setAttribute('src', './images/lighton.png');
             player2Accident = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -468,6 +483,7 @@ divEl.addEventListener('click', (e) => {
             gasL = document.getElementById('p2o');
             gasL.setAttribute('src', './images/lighton.png');
             player2OutOfGas = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -486,6 +502,7 @@ divEl.addEventListener('click', (e) => {
             flatL = document.getElementById('p2fl');
             flatL.setAttribute('src', './images/lighton.png');
             player2FlatTire = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -498,6 +515,7 @@ divEl.addEventListener('click', (e) => {
             }
             player2Go = false;
             //turn player2go light to off
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -515,6 +533,7 @@ divEl.addEventListener('click', (e) => {
             limitL = document.getElementById('p2s');
             limitL.setAttribute('src', './images/lighton.png');
             player2SpeedLimit = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -527,6 +546,7 @@ divEl.addEventListener('click', (e) => {
             }
             ace = document.getElementById('p1a');
             ace.setAttribute('src', './images/light.png');
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -539,6 +559,7 @@ divEl.addEventListener('click', (e) => {
             }
             gas = document.getElementById("p1o");
             gas.setAttribute('src', './images/light.png');
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -551,6 +572,7 @@ divEl.addEventListener('click', (e) => {
             }
             gas = document.getElementById("p1fl");
             gas.setAttribute('src', './images/light.png');
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -561,6 +583,7 @@ divEl.addEventListener('click', (e) => {
             ace.setAttribute('src', './images/lighton.png');
             Player1DrivingAce = true;
             p1Safety += 1;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -571,6 +594,7 @@ divEl.addEventListener('click', (e) => {
             fuelT.setAttribute('src', './images/lighton');
             player1FuelTruck = true;
             p1Safety += 1;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -581,6 +605,7 @@ divEl.addEventListener('click', (e) => {
             puncture.setAttribute('src', './images/lighton');
             player1PunctureProof = true;
             p1Safety += 1;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -591,6 +616,7 @@ divEl.addEventListener('click', (e) => {
             EV.setAttribute('src', './images/lighton.png');
             player1EmergencyVehicle = true;
             p1Safety += 1;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -602,6 +628,7 @@ divEl.addEventListener('click', (e) => {
         newHand(turn);
         if(cardIndex >= 82 && cardIndex <= 95){
             player2Go = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -625,6 +652,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -644,6 +672,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -663,6 +692,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -682,6 +712,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -706,6 +737,7 @@ divEl.addEventListener('click', (e) => {
                     determineWinner();
                 }
             }
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -724,6 +756,7 @@ divEl.addEventListener('click', (e) => {
             accidentL = document.getElementById('p1a');
             accidentL.setAttribute('src', './images/lighton.png');
             player1Accident = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -741,6 +774,7 @@ divEl.addEventListener('click', (e) => {
             gasL = document.getElementById('p1o');
             gasL.setAttribute('src', './images/lighton.png');
             player1OutOfGas = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -758,6 +792,7 @@ divEl.addEventListener('click', (e) => {
             flatL = document.getElementById('p1fl');
             flatL.setAttribute('src', './images/lighton.png');
             player1FlatTire = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -770,6 +805,7 @@ divEl.addEventListener('click', (e) => {
             }
             player1Go = false;
             //turn player2go light to off
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 2;
             clearHand();
@@ -787,6 +823,7 @@ divEl.addEventListener('click', (e) => {
             limitL = document.getElementById('p1s');
             limitL.setAttribute('src', './images/lighton.png');
             player1SpeedLimit = true;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -799,6 +836,7 @@ divEl.addEventListener('click', (e) => {
             }
             ace = document.getElementById('p2a');
             ace.setAttribute('src', './images/light.png');
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 2;
             clearHand();
@@ -811,6 +849,7 @@ divEl.addEventListener('click', (e) => {
             }
             gas = document.getElementById("p2o");
             gas.setAttribute('src', './images/light.png');
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 2;
             clearHand();
@@ -823,6 +862,7 @@ divEl.addEventListener('click', (e) => {
             }
             gas = document.getElementById("p2fl");
             gas.setAttribute('src', './images/light.png');
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 2;
             clearHand();
@@ -833,6 +873,7 @@ divEl.addEventListener('click', (e) => {
             ace.setAttribute('src', './images/lighton.png');
             Player2DrivingAce = true;
             p2Safety += 1;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -843,6 +884,7 @@ divEl.addEventListener('click', (e) => {
             fuelT.setAttribute('src', './images/lighton');
             player2FuelTruck = true;
             p2Safety += 1;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -853,6 +895,7 @@ divEl.addEventListener('click', (e) => {
             puncture.setAttribute('src', './images/lighton');
             player2PunctureProof = true;
             p2Safety += 1;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -863,6 +906,7 @@ divEl.addEventListener('click', (e) => {
             EV.setAttribute('src', './images/lighton.png');
             player2EmergencyVehicle = true;
             p2Safety += 1;
+            cardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
