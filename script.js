@@ -359,7 +359,7 @@ divEl.addEventListener('click', (e) => {
         else if(cardIndex >= 10 && cardIndex <= 19){
             if(!checkHazard(turn) && Player1Go){
                 if((player1RoundDistance + 50) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 player1RoundDistance += 50;
@@ -378,7 +378,7 @@ divEl.addEventListener('click', (e) => {
         else if(cardIndex >= 20 && cardIndex <= 29){
             if(!checkHazard(turn) && Player1Go){
                 if((player1RoundDistance + 75) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 player1RoundDistance += 75;
@@ -397,7 +397,7 @@ divEl.addEventListener('click', (e) => {
         else if(cardIndex >= 30 && cardIndex <= 41){
             if(!checkHazard(turn) && Player1Go){
                 if((player1RoundDistance + 100) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 player1RoundDistance += 100;
@@ -416,11 +416,11 @@ divEl.addEventListener('click', (e) => {
         else if(cardIndex >= 42 && cardIndex <= 45){
             if(!checkHazard(turn) && Player1Go){
                 if((player1RoundDistance + 200) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 else if(player1distance200 > 2){
-                    console.log("More than 2 200 mile cards may not be played in a round.");
+                    playerMsg("More than 2 200 mile cards may not be played in a round.");
                     return;
                 }
                 player1distance200 += 1;
@@ -439,11 +439,11 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 46 && cardIndex <= 48){
             if(checkHazard(2)){
-                console.log("Player 2 already has a hazard");
+                playerMsg("Player 2 already has a hazard");
                 return;
             }
             else if(player2DrivingAce){
-                console.log("Player 2 has Driving Ace");
+                playerMsg("Player 2 has Driving Ace");
                 return;
             }
             player2Go = false;
@@ -457,11 +457,11 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 49 && cardIndex <= 51){
             if(checkHazard(2)){
-                console.log("Player 2 already has a hazard");
+                playerMsg("Player 2 already has a hazard");
                 return;
             }
             else if(player2FuelTruck){
-                console.log("Player 2 has Fuel Truck");
+                player2Msg("Player 2 has Fuel Truck");
                 return;
             }
             player2Go = false;
@@ -475,11 +475,11 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 52 && cardIndex <= 54){
             if(checkHazard(2)){
-                console.log("Player 2 already has a hazard");
+                playerMsg("Player 2 already has a hazard");
                 return;
             }
             else if(player2PunctureProof){
-                console.log("Player 2 has Puncture Proof");
+                playerMsg("Player 2 has Puncture Proof");
                 return;
             }
             player2Go = false;
@@ -493,7 +493,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 55 && cardIndex <= 59){
             if(!player2Go){
-                console.log("Player 2 can't go");
+                playerMsg("Player 2 can't go");
                 return;
             }
             player2Go = false;
@@ -505,11 +505,11 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 60 && cardIndex <= 63){
             if(player2SpeedLimit){
-                console.log("Player 2 already has a speed limit");
+                playerMsg("Player 2 already has a speed limit");
                 return;
             }
             else if(player2EmergencyVehicle){
-                console.log("Player 2 has Emergency Vehicle");
+                playerMsg("Player 2 has Emergency Vehicle");
                 return;
             }
             limitL = document.getElementById('p2s');
@@ -522,7 +522,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 64 && cardIndex <= 69){
             if(!player1Accident){
-                console.log("You didn't have an accident");
+                playerMsg("You didn't have an accident");
                 return;
             }
             ace = document.getElementById('p1a');
@@ -534,7 +534,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 70 && cardIndex <= 75){
             if(!player1OutOfGas){
-                console.log("You aren't out of gas");
+                playerMsg("You aren't out of gas");
                 return;
             }
             gas = document.getElementById("p1o");
@@ -546,7 +546,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 76 && cardIndex <= 81){
             if(!player1FlatTire){
-                console.log("You don't have a flat tire");
+                playerMsg("You don't have a flat tire");
                 return;
             }
             gas = document.getElementById("p1fl");
@@ -609,13 +609,13 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 0 && cardIndex <= 45){
             if(player2Go === false){
-                console.log("Play a Go card first");
+                playerMsg("Play a Go card first");
             }
         }
         else if(cardIndex >= 0 && cardIndex <= 9){
             if(!checkHazard(turn) && Player2Go){
                 if((player2RoundDistance + 25) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 player2RoundDistance += 25
@@ -634,7 +634,7 @@ divEl.addEventListener('click', (e) => {
         else if(cardIndex >= 10 && cardIndex <= 19){
             if(!checkHazard(turn) && Player2Go){
                 if((player2RoundDistance + 50) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 player2RoundDistance += 50;
@@ -653,7 +653,7 @@ divEl.addEventListener('click', (e) => {
         else if(cardIndex >= 20 && cardIndex <= 29){
             if(!checkHazard(turn) && Player2Go){
                 if((player2RoundDistance + 75) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 player2RoundDistance += 75;
@@ -672,7 +672,7 @@ divEl.addEventListener('click', (e) => {
         else if(cardIndex >= 30 && cardIndex <= 41){
             if(!checkHazard(turn) && Player2Go){
                 if((player2RoundDistance + 100) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 player2RoundDistance += 100;
@@ -691,11 +691,11 @@ divEl.addEventListener('click', (e) => {
         else if(cardIndex >= 42 && cardIndex <= 45){
             if(!checkHazard(turn) && Player2Go){
                 if((player2RoundDistance + 200) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 else if(player2distance200 > 2){
-                    console.log("More than 2 200 mile cards may not be played in a round.");
+                    playerMsg("More than 2 200 mile cards may not be played in a round.");
                     return;
                 }
                 player2distance200 += 1;
@@ -714,11 +714,11 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 46 && cardIndex <= 48){
             if(checkHazard(1)){
-                console.log("Player 1 already has a hazard");
+                playerMsg("Player 1 already has a hazard");
                 return;
             }
             else if(player1DrivingAce){
-                console.log("Player 1 has Driving Ace");
+                playerMsg("Player 1 has Driving Ace");
                 return;
             }
             accidentL = document.getElementById('p1a');
@@ -727,7 +727,7 @@ divEl.addEventListener('click', (e) => {
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
-            newHand(1);
+            newHand(turn);
         }
         else if(cardIndex >= 49 && cardIndex <= 51){
             if(checkHazard(1)){
@@ -735,7 +735,7 @@ divEl.addEventListener('click', (e) => {
                 return;
             }
             else if(player1FuelTruck){
-                console.log("Player 1 has Fuel Truck");
+                playerMsg("Player 1 has Fuel Truck");
                 return;
             }
             gasL = document.getElementById('p1o');
@@ -744,15 +744,15 @@ divEl.addEventListener('click', (e) => {
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
-            newHand(1);
+            newHand(turn);
         }
         else if(cardIndex >= 52 && cardIndex <= 54){
             if(checkHazard(1)){
-                console.log("Player 1 already has a hazard");
+                playerMsg("Player 1 already has a hazard");
                 return;
             }
             else if(player1PunctureProof){
-                console.log("Player 1 has Puncture Proof");
+                playerMsg("Player 1 has Puncture Proof");
                 return;
             }
             flatL = document.getElementById('p1fl');
@@ -761,11 +761,11 @@ divEl.addEventListener('click', (e) => {
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
-            newHand(1);
+            newHand(turn);
         }
         else if(cardIndex >= 55 && cardIndex <= 59){
             if(!player1Go){
-                console.log("Player 1 can't go");
+                playerMsg("Player 1 can't go");
                 return;
             }
             player1Go = false;
@@ -777,11 +777,11 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 60 && cardIndex <= 63){
             if(player1SpeedLimit){
-                console.log("A speed limit has already been played");
+                playerMsg("A speed limit has already been played");
                 return;
             }
             else if(player1EmergencyVehicle){
-                console.log("Player 1 has emergency vehicle");
+                playerMsg("Player 1 has emergency vehicle");
                 return;
             }
             limitL = document.getElementById('p1s');
@@ -794,7 +794,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 64 && cardIndex <= 69){
             if(!player2Accident){
-                console.log("You didn't have an accident");
+                playerMsg("You didn't have an accident");
                 return;
             }
             ace = document.getElementById('p2a');
@@ -806,7 +806,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 70 && cardIndex <= 75){
             if(!player2OutOfGas){
-                console.log("You aren't out of gas");
+                playerMsg("You aren't out of gas");
                 return;
             }
             gas = document.getElementById("p2o");
@@ -818,7 +818,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 76 && cardIndex <= 81){
             if(!player2FlatTire){
-                console.log("You don't have a flat tire");
+                playerMsg("You don't have a flat tire");
                 return;
             }
             gas = document.getElementById("p2fl");
