@@ -128,11 +128,55 @@ function newHand(player){
 }
 
 function determineWinner(){
-    player1TotalScore = player1RoundDistance;
+    //calculate player 1 round score
+    player1RoundScore = player1RoundDistance;
     if(player1RoundDistance == 1000){
-        playerTotalScore += 400;
+        player1RoundScore += 400;
     }
-    player1TotalScore += 
+    player1RoundScore += (p1Safety * 100);
+    if(plSafety === 4){
+        player1RoundScore += 300;
+    }
+    if(player1Distance200 === 0){
+        player1RoundScore += 300;
+    }
+    if(player2RoundDistance === 0){
+        player2RoundScore += 500;
+    }
+    //Calculate player 2 round score
+    player2RoundScore = player2RoundDistance;
+    if(player2RoundDistance == 1000){
+        player2RoundScore += 400;
+    }
+    player2RoundScore += (p2Safety * 100);
+    if(p2Safety === 4){
+        player2RoundScore += 300;
+    }
+    if(player2Distance200 === 0){
+        player1RoundScore += 300;
+    }
+    if(player2RoundDistance === 0){
+        player2RoundScore += 500;
+    }
+    if(player1RoundScore >= player2RoundScore){
+        playerMsg("Player 1 has won the round!");
+        init();
+    }
+    else if(player2RoundScore >= player1RoundScore){
+        playerMsg("Player 2 has won the round!");
+        init();
+    }
+    if(player1RoundScore >= 5000){
+        playerMsg("Player 1 has won");
+    }
+    else if(player2RoundScore >= 5000){
+        playerMsg("Player 2 has won")
+    }
+
+}
+
+function playerMessage(message){
+    //
 }
 
 
@@ -272,11 +316,11 @@ divEl.addEventListener('click', (e) => {
         newHand(turn);
         if(cardIndex >= 82 && cardIndex <= 95){
             if(player1Go === true){
-                console.log("Go card has already been played")
+                playerMsg("Go card has already been played");
                 return;
             }
             if(checkHazard(1)){
-                console.log("Clear the hazard first");
+                playerMsg("Clear the hazard first");
                 return;
             }
             player1Go = true;
@@ -289,14 +333,14 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 0 && cardIndex <= 45){
             if(player1Go === false){
-                console.log("Play a Go card first");
+                playerMsg("Play a Go card first");
                 return;
             }
         }
         else if(cardIndex >= 0 && cardIndex <= 9){
             if(!checkHazard(turn) && Player1Go){
                 if((player1RoundDistance + 25) > 1000){
-                    console.log("Distance will be greater than 1000");
+                    playerMsg("Distance will be greater than 1000");
                     return;
                 }
                 player1RoundDistance += 25
