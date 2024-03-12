@@ -35,6 +35,8 @@ let player2TotalScore = 0;
 let winner = false;
 let player1Distance200 = 0;
 let player2Distance200 = 0;
+let p1Safety = 0;
+let p2Safety = 0;
 
 const HANDSIZE = 6;
 const DECKSIZE = 99;
@@ -126,7 +128,11 @@ function newHand(player){
 }
 
 function determineWinner(){
-    console.log("place holder");
+    player1TotalScore = player1RoundDistance;
+    if(player1RoundDistance == 1000){
+        playerTotalScore += 400;
+    }
+    player1TotalScore += 
 }
 
 
@@ -269,7 +275,12 @@ divEl.addEventListener('click', (e) => {
                 console.log("Go card has already been played")
                 return;
             }
+            if(checkHazard(1)){
+                console.log("Clear the hazard first");
+                return;
+            }
             player1Go = true;
+            //turn on player1go light
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -391,6 +402,7 @@ divEl.addEventListener('click', (e) => {
                 console.log("Player 2 has Driving Ace");
                 return;
             }
+            player2Go = false;
             accidentL = document.getElementById('p2a');
             accidentL.setAttribute('src', './images/lighton.png');
             player2Accident = true;
@@ -408,6 +420,7 @@ divEl.addEventListener('click', (e) => {
                 console.log("Player 2 has Fuel Truck");
                 return;
             }
+            player2Go = false;
             gasL = document.getElementById('p2o');
             gasL.setAttribute('src', './images/lighton.png');
             player2OutOfGas = true;
@@ -425,9 +438,22 @@ divEl.addEventListener('click', (e) => {
                 console.log("Player 2 has Puncture Proof");
                 return;
             }
+            player2Go = false;
             flatL = document.getElementById('p2fl');
             flatL.setAttribute('src', './images/lighton.png');
             player2FlatTire = true;
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+        }
+        else if(cardIndex >= 55 && cardIndex <= 59){
+            if(!player2Go){
+                console.log("Player 2 can't go");
+                return;
+            }
+            player2Go = false;
+            //turn player2go light to off
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -450,10 +476,47 @@ divEl.addEventListener('click', (e) => {
             clearHand();
             newHand(turn);
         }
+        else if(cardIndex >= 64 && cardIndex <= 69){
+            if(!player1Accident){
+                console.log("You didn't have an accident");
+                return;
+            }
+            ace = document.getElementById('p1a');
+            ace.setAttribute('src', './images/light.png');
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+        }
+        else if(cardIndex >= 70 && cardIndex <= 75){
+            if(!player1OutOfGas){
+                console.log("You aren't out of gas");
+                return;
+            }
+            gas = document.getElementById("p1o");
+            gas.setAttribute('src', './images/light.png');
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+        }
+        else if(cardIndex >= 76 && cardIndex <= 81){
+            if(!player1FlatTire){
+                console.log("You don't have a flat tire");
+                return;
+            }
+            gas = document.getElementById("p1fl");
+            gas.setAttribute('src', './images/light.png');
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+        }
         else if(cardIndex === 96){
             ace = document.getElementById('p1ac');
             ace.setAttribute('src', './images/lighton.png');
             Player1DrivingAce = true;
+            p1Safety += 1;
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -463,6 +526,7 @@ divEl.addEventListener('click', (e) => {
             fuelT = document.getElementById('p1f');
             fuelT.setAttribute('src', './images/lighton');
             player1FuelTruck = true;
+            p1Safety += 1;
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -472,6 +536,7 @@ divEl.addEventListener('click', (e) => {
             punture = document.getElementById('p1t');
             puncture.setAttribute('src', './images/lighton');
             player1PunctureProof = true;
+            p1Safety += 1;
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -481,6 +546,7 @@ divEl.addEventListener('click', (e) => {
             EV = document.getElementById('p1ev');
             EV.setAttribute('src', './images/lighton.png');
             player1EmergencyVehicle = true;
+            p1Safety += 1;
             removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
             clearHand();
@@ -653,6 +719,18 @@ divEl.addEventListener('click', (e) => {
             clearHand();
             newHand(1);
         }
+        else if(cardIndex >= 55 && cardIndex <= 59){
+            if(!player1Go){
+                console.log("Player 1 can't go");
+                return;
+            }
+            player1Go = false;
+            //turn player2go light to off
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+        }
         else if(cardIndex >= 60 && cardIndex <= 63){
             if(player1SpeedLimit){
                 console.log("A speed limit has already been played");
@@ -670,10 +748,47 @@ divEl.addEventListener('click', (e) => {
             clearHand();
             newHand(turn);
         }
+        else if(cardIndex >= 64 && cardIndex <= 69){
+            if(!player2Accident){
+                console.log("You didn't have an accident");
+                return;
+            }
+            ace = document.getElementById('p2a');
+            ace.setAttribute('src', './images/light.png');
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+        }
+        else if(cardIndex >= 70 && cardIndex <= 75){
+            if(!player2OutOfGas){
+                console.log("You aren't out of gas");
+                return;
+            }
+            gas = document.getElementById("p2o");
+            gas.setAttribute('src', './images/light.png');
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+        }
+        else if(cardIndex >= 76 && cardIndex <= 81){
+            if(!player2FlatTire){
+                console.log("You don't have a flat tire");
+                return;
+            }
+            gas = document.getElementById("p2fl");
+            gas.setAttribute('src', './images/light.png');
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+        }
         else if(cardIndex === 96){
             ace = document.getElementById('p2ac');
             ace.setAttribute('src', './images/lighton.png');
             Player2DrivingAce = true;
+            p2Safety += 1;
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -683,6 +798,7 @@ divEl.addEventListener('click', (e) => {
             fuelT = document.getElementById('p2f');
             fuelT.setAttribute('src', './images/lighton');
             player2FuelTruck = true;
+            p2Safety += 1;
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -692,6 +808,7 @@ divEl.addEventListener('click', (e) => {
             punture = document.getElementById('p2t');
             puncture.setAttribute('src', './images/lighton');
             player2PunctureProof = true;
+            p2Safety += 1;
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
@@ -701,6 +818,7 @@ divEl.addEventListener('click', (e) => {
             EV = document.getElementById('p2ev');
             EV.setAttribute('src', './images/lighton.png');
             player2EmergencyVehicle = true;
+            p2Safety += 1;
             removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
             clearHand();
