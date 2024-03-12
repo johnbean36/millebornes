@@ -26,6 +26,15 @@ let player2FuelTruck = false;
 let player2PunctureProof = false;
 let player2EmergencyVehicle = false;
 let handIndex = 0;
+let player1RoundDistance = 0;
+let player2RoundDistance = 0;
+let player1RoundScore = 0;
+let player2RoundScore = 0;
+let player1TotalScore = 0;
+let player2TotalScore = 0;
+let winner = false;
+let player1Distance200 = 0;
+let player2Distance200 = 0;
 
 const HANDSIZE = 6;
 const DECKSIZE = 99;
@@ -43,9 +52,9 @@ function init() {
 }
 
 //Removes the clicked card from the players hand
-function removeFromHand(cardIndex){
-    handIndex = player1Hand.indexOf(cardIndex);
-    player1Hand.splice(handIndex, 1);
+function removeFromHand(cardIndex, player){
+    handIndex = player.indexOf(cardIndex);
+    player.splice(handIndex, 1);
 }
 
 //Function to choose a number from the deck of cards and returns that number
@@ -64,6 +73,61 @@ function chooseCard(){
     }
 }
 
+//checks to see if the player has any hazards
+function checkHazard(player){
+    if(player === 1){
+        if (player1Accident){
+            return true;
+        }
+        else if(player1OutOfGas){
+            return true;
+        }
+        else if(player1FlatTire){
+            return true;
+        }
+        else if(player1SpeedLimit){
+            return true;
+        }
+    }
+    else if(player === 2){
+        if (player2Accident){
+            return true;
+        }
+        else if(player2OutOfGas){
+            return true;
+        }
+        else if(player2FlatTire){
+            return true;
+        }
+        else if(player2SpeedLimit){
+            return true;
+        }
+    }
+}
+
+//clears the cards from the divs
+function clearHand(){
+    for( let i = 0; i < HANDSIZE; i++){
+        cardHand[i].removeChild(cardHand[i].firstChild);
+    }
+}
+function newHand(player){
+    if(player === 1){
+        for (let i = 0; i < HANDSIZE; i++) {
+            cardHand[i].appendChild(player1Hand[i]);
+        }
+    }
+    else if(player === 2){
+        for (let i = 0; i < HANDSIZE; i++) {
+            cardHand[i].appendChild(player2Hand[i]);
+        }
+    }
+
+}
+
+function determineWinner(){
+    console.log("place holder");
+}
 
 
 //Numbers of each type of card in Mille Bornes
@@ -96,6 +160,9 @@ for(i = 1; i <= HANDSIZE; i++){
 }
 
 divEl = document.getElementById("hand");
+
+p1rsLabel = document.getElementById('p1rs');
+p2rsLabel = document.getElementById('p2rs');
 
 //Creating img objects to put card images into
 for( i in cardNumbers){
@@ -169,13 +236,14 @@ cardEl[count].setAttribute('src', './images/puncture_proof.png');
 count += 1;
 cardEl[count].setAttribute('src', './images/emergency_vehicle.png');
 
+//Drag and drop cards
 for ( i = 0; i < DECKSIZE; i++){
     cardEl[i].setAttribute('draggable', true);
     cardEl[i].addEventListener('dragstart', (e) => {
-        console.log("hello");
     });
 }
 
+//Randomly selection cards to place in the players hand
 for( let i = 1; i <= 2; i++){
     for(let j = 0; j < HANDSIZE; j++){
         if(i === 1){
@@ -187,158 +255,456 @@ for( let i = 1; i <= 2; i++){
     }
 }
 
+
 divEl.addEventListener('click', (e) => {
     const cardIndex = cardEl.indexOf(e.target);
-    if (turn === 1){
+    if(winner){
+        return;
+    }
+    else if (turn === 1){
+        clearHand();
+        newHand(turn);
         if(cardIndex >= 82 && cardIndex <= 95){
+            if(player1Go === true){
+                console.log("Go card has already been played")
+                return;
+            }
             player1Go = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
-            for (let i =0; i < HANDSIZE; i++){
-                cardHand[i].removeChild();
-            }
-            for (let i = 0; i < HANDSIZE; i++){
-                cardHand[i].appendChild(player2Hand[i]);
-            }
+            clearHand();
+            newHand(turn);
+            return;
         }
         else if(cardIndex >= 0 && cardIndex <= 45){
             if(player1Go === false){
                 console.log("Play a Go card first");
+                return;
             }
         }
+        else if(cardIndex >= 0 && cardIndex <= 9){
+            if(!checkHazard(turn) && Player1Go){
+                if((player1RoundDistance + 25) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                player1RoundDistance += 25
+                p1rsLabel.InnerText = player1RoundDistance;
+                if(player1RoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+            return;
+        }
+        else if(cardIndex >= 10 && cardIndex <= 19){
+            if(!checkHazard(turn) && Player1Go){
+                if((player1RoundDistance + 50) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                player1RoundDistance += 50;
+                p1rsLabel.InnerText = player1RoundDistance;
+                if(playerRoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+            return;
+        }
+        else if(cardIndex >= 20 && cardIndex <= 29){
+            if(!checkHazard(turn) && Player1Go){
+                if((player1RoundDistance + 75) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                player1RoundDistance += 75;
+                p1rsLabel.InnerText = player1RoundDistance;
+                if(playerRoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+            return;
+        }
+        else if(cardIndex >= 30 && cardIndex <= 41){
+            if(!checkHazard(turn) && Player1Go){
+                if((player1RoundDistance + 100) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                player1RoundDistance += 100;
+                p1rsLabel.InnerText = player1RoundDistance;
+                if(player1RoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+            return;
+        }
+        else if(cardIndex >= 42 && cardIndex <= 45){
+            if(!checkHazard(turn) && Player1Go){
+                if((player1RoundDistance + 200) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                else if(player1distance200 > 2){
+                    console.log("More than 2 200 mile cards may not be played in a round.");
+                    return;
+                }
+                player1distance200 += 1;
+                player1RoundDistance += 200;
+                p1rsLabel.InnerText = player1RoundDistance;
+                if(player1RoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player1Hand);
+            turn = 2;
+            clearHand();
+            newHand(turn);
+            return;
+        }
         else if(cardIndex >= 46 && cardIndex <= 48){
+            if(checkHazard(2)){
+                console.log("Player 2 already has a hazard");
+                return;
+            }
+            else if(player2DrivingAce){
+                console.log("Player 2 has Driving Ace");
+                return;
+            }
             accidentL = document.getElementById('p2a');
             accidentL.setAttribute('src', './images/lighton.png');
             player2Accident = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
-            for (let i =0; i < HANDSIZE; i++){
-                cardHand[i].removeChild();
-            }
-            for (let i = 0; i < HANDSIZE; i++){
-                cardHand[i].appendChild(player2Hand[i]);
-            }
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex >= 49 && cardIndex <= 51){
+            if(checkHazard(2)){
+                console.log("Player 2 already has a hazard");
+                return;
+            }
+            else if(player2FuelTruck){
+                console.log("Player 2 has Fuel Truck");
+                return;
+            }
             gasL = document.getElementById('p2o');
             gasL.setAttribute('src', './images/lighton.png');
             player2OutOfGas = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex >= 52 && cardIndex <= 54){
+            if(checkHazard(2)){
+                console.log("Player 2 already has a hazard");
+                return;
+            }
+            else if(player2PunctureProof){
+                console.log("Player 2 has Puncture Proof");
+                return;
+            }
             flatL = document.getElementById('p2fl');
             flatL.setAttribute('src', './images/lighton.png');
             player2FlatTire = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex >= 60 && cardIndex <= 63){
+            if(player2SpeedLimit){
+                console.log("Player 2 already has a speed limit");
+                return;
+            }
+            else if(player2EmergencyVehicle){
+                console.log("Player 2 has Emergency Vehicle");
+                return;
+            }
             limitL = document.getElementById('p2s');
             limitL.setAttribute('src', './images/lighton.png');
             player2SpeedLimit = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex === 96){
             ace = document.getElementById('p1ac');
             ace.setAttribute('src', './images/lighton.png');
             Player1DrivingAce = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex === 97){
             fuelT = document.getElementById('p1f');
             fuelT.setAttribute('src', './images/lighton');
             player1FuelTruck = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex === 98){
             punture = document.getElementById('p1t');
             puncture.setAttribute('src', './images/lighton');
             player1PunctureProof = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex === 99){
             EV = document.getElementById('p1ev');
             EV.setAttribute('src', './images/lighton.png');
             player1EmergencyVehicle = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player1Hand);
             turn = 2;
+            clearHand();
+            newHand(turn);
         }
     }
     else if (turn === 2){
-        for (let i =0; i < HANDSIZE; i++){
-            cardHand[i].removeChild();
-        }
-        for (let i = 0; i < HANDSIZE; i++){
-            cardHand[i].appendChild(player2Hand[i]);
-        }
+        clearHand();
+        newHand(turn);
         if(cardIndex >= 82 && cardIndex <= 95){
             player2Go = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex >= 0 && cardIndex <= 45){
             if(player2Go === false){
                 console.log("Play a Go card first");
             }
         }
+        else if(cardIndex >= 0 && cardIndex <= 9){
+            if(!checkHazard(turn) && Player2Go){
+                if((player2RoundDistance + 25) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                player2RoundDistance += 25
+                p2rsLabel.InnerText = player2RoundDistance;
+                if(player2RoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 1;
+            clearHand();
+            newHand(turn);
+            return;
+        }
+        else if(cardIndex >= 10 && cardIndex <= 19){
+            if(!checkHazard(turn) && Player2Go){
+                if((player2RoundDistance + 50) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                player2RoundDistance += 50;
+                p2rsLabel.InnerText = player2RoundDistance;
+                if(player2RoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 1;
+            clearHand();
+            newHand(turn);
+            return;
+        }
+        else if(cardIndex >= 20 && cardIndex <= 29){
+            if(!checkHazard(turn) && Player2Go){
+                if((player2RoundDistance + 75) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                player2RoundDistance += 75;
+                p2rsLabel.InnerText = player2RoundDistance;
+                if(player2RoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 1;
+            clearHand();
+            newHand(turn);
+            return;
+        }
+        else if(cardIndex >= 30 && cardIndex <= 41){
+            if(!checkHazard(turn) && Player2Go){
+                if((player2RoundDistance + 100) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                player2RoundDistance += 100;
+                p2rsLabel.InnerText = player2RoundDistance;
+                if(player2RoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 1;
+            clearHand();
+            newHand(turn);
+            return;
+        }
+        else if(cardIndex >= 42 && cardIndex <= 45){
+            if(!checkHazard(turn) && Player2Go){
+                if((player2RoundDistance + 200) > 1000){
+                    console.log("Distance will be greater than 1000");
+                    return;
+                }
+                else if(player2distance200 > 2){
+                    console.log("More than 2 200 mile cards may not be played in a round.");
+                    return;
+                }
+                player2distance200 += 1;
+                player2RoundDistance += 200;
+                p2rsLabel.InnerText = player2RoundDistance;
+                if(player2RoundDistance === 1000){
+                    winner = true;
+                    determineWinner();
+                }
+            }
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 1;
+            clearHand();
+            newHand(turn);
+            return;
+        }
         else if(cardIndex >= 46 && cardIndex <= 48){
+            if(checkHazard(1)){
+                console.log("Player 1 already has a hazard");
+                return;
+            }
+            else if(player1DrivingAce){
+                console.log("Player 1 has Driving Ace");
+                return;
+            }
             accidentL = document.getElementById('p1a');
             accidentL.setAttribute('src', './images/lighton.png');
             player1Accident = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
+            clearHand();
+            newHand(1);
         }
         else if(cardIndex >= 49 && cardIndex <= 51){
+            if(checkHazard(1)){
+                console.log("Player 1 already has a hazard");
+                return;
+            }
+            else if(player1FuelTruck){
+                console.log("Player 1 has Fuel Truck");
+                return;
+            }
             gasL = document.getElementById('p1o');
             gasL.setAttribute('src', './images/lighton.png');
             player1OutOfGas = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
+            clearHand();
+            newHand(1);
         }
         else if(cardIndex >= 52 && cardIndex <= 54){
+            if(checkHazard(1)){
+                console.log("Player 1 already has a hazard");
+                return;
+            }
+            else if(player1PunctureProof){
+                console.log("Player 1 has Puncture Proof");
+                return;
+            }
             flatL = document.getElementById('p1fl');
             flatL.setAttribute('src', './images/lighton.png');
             player1FlatTire = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
+            clearHand();
+            newHand(1);
         }
         else if(cardIndex >= 60 && cardIndex <= 63){
+            if(player1SpeedLimit){
+                console.log("A speed limit has already been played");
+                return;
+            }
+            else if(player1EmergencyVehicle){
+                console.log("Player 1 has emergency vehicle");
+                return;
+            }
             limitL = document.getElementById('p1s');
             limitL.setAttribute('src', './images/lighton.png');
             player1SpeedLimit = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
+            clearHand();
+            newHand(turn);
         }
         else if(cardIndex === 96){
             ace = document.getElementById('p2ac');
             ace.setAttribute('src', './images/lighton.png');
             Player2DrivingAce = true;
+            removeFromHand(cardEl[cardIndex], player2Hand);
+            turn = 1;
+            clearHand();
+            newHand(1);
         }
         else if(cardIndex === 97){
             fuelT = document.getElementById('p2f');
             fuelT.setAttribute('src', './images/lighton');
             player2FuelTruck = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
+            clearHand();
+            newHand(1);
         }
         else if(cardIndex === 98){
             punture = document.getElementById('p2t');
             puncture.setAttribute('src', './images/lighton');
             player2PunctureProof = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
+            clearHand();
+            newHand(1);
         }
         else if(cardIndex === 99){
             EV = document.getElementById('p2ev');
             EV.setAttribute('src', './images/lighton.png');
             player2EmergencyVehicle = true;
-            removeFromHand(cardEl(cardIndex));
+            removeFromHand(cardEl[cardIndex], player2Hand);
             turn = 1;
+            clearHand();
+            newHand(1);
         }
     }
 });
@@ -347,6 +713,6 @@ divEl.addEventListener('click', (e) => {
 //    console.log("");
 //});
 
-for (let i = 0; i < HANDSIZE; i++){
+for (let i = 0; i < HANDSIZE; i++) {
     cardHand[i].appendChild(player1Hand[i]);
 }
