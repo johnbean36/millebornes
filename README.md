@@ -11,6 +11,9 @@ Mille Borne is a French card game that the player tries to reach a goal distance
 ***
 ##Credits:
 ***
+Website that gave me information on dragging and dropping objects
+https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dragover_event
+
 The Parker Brothers instruction manual for Mille Bornes
 ##Pseudocode
 * Code the layout for the card game in HTML and CSS
