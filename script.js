@@ -66,6 +66,32 @@ function init() {
     playerHand[0] = [];
     playerHand[1] = [];
     cardHand = [];
+    playerGo[0] = false;
+    playerGo[1] = false;
+    playerAccident[0] = false;
+    playerAccident[1] = false;
+    playerOutofGas[0] = false;
+    playerOutofGas[1] = false;
+    playerFlatTire[0] = false;
+    playerFlatTire[1] = false;
+    playerSpeedLimit[0] = false;
+    playerSpeedLimit[1] = false;
+    playerDrivingAce[0] = false;
+    playerDrivingAce[1] = false;
+    playerFuelTruck[0] = false;
+    playerFuelTruck[1] = false;
+    playerPunctureProof[0] = false;
+    playerPunctureProof[1] = false;
+    playerEmergencyVehicle[0] = false;
+    playerEmergencyVehicle[1] = false;
+    playerRoundScore[0] = 0;
+    playerRoundScore[1] = 0;
+    playerRoundScore[0] = 0;
+    playerRoundScore[1] = 0;
+    playerDistance200[0] = 0;
+    playerDistance200[1] = 0;
+    pSafety[0] = 0;
+    pSafety[1] = 0;
 }
 
 //Cached elements
@@ -110,9 +136,6 @@ function checkHazard(player){
         return true;
     }
     else if(playerFlatTire[a]){
-        return true;
-    }
-    else if(playerSpeedLimit[a]){
         return true;
     }
 }
@@ -237,7 +260,7 @@ const divEl = document.getElementById("hand");
 const p1rsLabel = document.getElementById('p1rs');
 const p2rsLabel = document.getElementById('p2rs');
 
-const pMessage = document.getElementById('playerMsg');
+const pMessage = document.getElementById('tips');
 
 const discard = document.getElementById('discard');
 
@@ -414,15 +437,19 @@ function mileCard(cardIndex, mile){
     let prsLabel;
     if(turn === 1){
         a = 0;
-        prsLabel = document.getElementById('p1rs');
+        prsLabel = document.getElementById('p1d');
     }
     else if(turn === 2){
         a = 1;
-        prsLabel = document.getElementById('p2rs');
+        prsLabel = document.getElementById('p2d');
     }
     if(!checkHazard(turn) && playerGo[a]){
         if((playerRoundDistance[a] + mile) > 1000){
             playerMsg("Distance will be greater than 1000");
+            return;
+        }
+        if(playerSpeedLimit[a] && mile > 50){
+            playerMsg("Play an End of Limit card");
             return;
         }
         playerRoundDistance[a] += mile;
@@ -449,7 +476,7 @@ function mileCard(cardIndex, mile){
         playerMsg(`Player ${turn}'s Turn`);
         return;
     }
-    else{        
+    else{
         if(!playerGo[a]){
             playerMsg("Play a Go card first");
             return;
@@ -471,12 +498,14 @@ function accident(cardIndex){
         hazard = 2;
         b = 1;
         accidentL = document.getElementById('p2a');
+        go = document.getElementById('p2go');
     }
     else if(turn === 2){
         a = 1;
         hazard = 1;
         b = 0;
         accidentL = document.getElementById('p1a');
+        go = document.getElementById('p1go');
     }
     if(checkHazard(hazard)){
         playerMsg(`Player ${hazard} already has a hazard`);
@@ -488,6 +517,7 @@ function accident(cardIndex){
     }
     playerGo[b] = false;
     accidentL.setAttribute('src', './images/lighton.png');
+    go.setAttribute('src', './images/light.png');
     playerAccident[b] = true;
     nCardsPlayed();
     removeFromHand(cardEl[cardIndex], playerHand[a]);
@@ -514,12 +544,14 @@ function outOfGas(cardIndex){
         hazard = 2;
         b = 1;
         accidentL = document.getElementById('p2o');
+        go = document.getElementById('p2go');
     }
     else if(turn === 2){
         a = 1;
         hazard = 1;
         b = 0;
         accidentL = document.getElementById('p1o');
+        go = document.getElementById('p1go');
     }
     if(checkHazard(hazard)){
         playerMsg(`Player ${hazard} already has a hazard`);
@@ -531,6 +563,7 @@ function outOfGas(cardIndex){
     }
     playerGo[b] = false;
     accidentL.setAttribute('src', './images/lighton.png');
+    go.setAttribute('src', './images/light.png');
     playerOutofGas[b] = true;
     nCardsPlayed();
     removeFromHand(cardEl[cardIndex], playerHand[a]);
@@ -576,7 +609,7 @@ function flatTire(cardIndex){
     }
     playerGo[b] = false;
     accidentL.setAttribute('src', './images/lighton.png');
-    go.set.Attribute('src', './images/light.png');
+    go.setAttribute('src', './images/light.png');
     playerFlatTire[b] = true;
     nCardsPlayed();
     removeFromHand(cardEl[cardIndex], playerHand[a]);
@@ -957,3 +990,10 @@ divEl.addEventListener('click', (e) => {
 for (let i = 0; i < HANDSIZE; i++) {
     cardHand[i].appendChild(playerHand[0][i]);
 }
+
+buttonEl.addEventListener('click', () => {
+    init();
+    playerTotalScore[0] = 0;
+    playerTotalScore[1] = 0;
+    buttonEl.setAttribute('disabled', true);
+})
