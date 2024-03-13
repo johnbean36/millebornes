@@ -55,9 +55,8 @@ function init() {
 
 //Removes the clicked card from the players hand
 function removeFromHand(cardIndex, player){
-    handIndex = player.indexOf(cardIndex);
-    player.splice(handIndex, 1);
-    playerMsg("hello");
+   handIndex = player.indexOf(cardIndex);
+   player.splice(handIndex, 1);
 }
 
 //Function to choose a number from the deck of cards and returns that number
@@ -187,6 +186,15 @@ function nCardsPlayed(){
     }
 }
 
+function addCardToHand(player){
+    if(player === 1){
+        player1Hand.push(cardEl[chooseCard()]);
+    }
+    else if(player === 2){
+        player2Hand.push(cardEl[chooseCard()]);
+    }
+}
+
 
 
 //Numbers of each type of card in Mille Bornes
@@ -300,7 +308,7 @@ count += 1;
 cardEl[count].setAttribute('src', './images/emergency_vehicle.png');
 
 //Drag and drop cards
-for ( i = 0; i < DECKSIZE; i++){
+for (let i = 0; i < DECKSIZE; i++){
     cardEl[i].setAttribute('draggable', true);
     cardEl[i].addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', i);
@@ -309,7 +317,11 @@ for ( i = 0; i < DECKSIZE; i++){
 
 discard.addEventListener('dragover', function(e){
     e.preventDefault();
-    let dCardIndex = e.dataTransfer.getData("text/plain");
+})
+
+discard.addEventListener('drop', function(e){
+    e.preventDefault();
+    let dCardIndex = parseInt(e.dataTransfer.getData("text/plain"));
     let dCard = cardEl[dCardIndex];
     if(turn === 1){
         removeFromHand(dCard, player1Hand);
@@ -323,7 +335,6 @@ discard.addEventListener('dragover', function(e){
         clearHand();
         newHand(2);
     }
-    
 })
 
 //Randomly selection cards to place in the players hand
@@ -335,15 +346,6 @@ for( let i = 1; i <= 2; i++){
         else if(i === 2){
             player2Hand.push(cardEl[chooseCard()]);
         }
-    }
-}
-
-function addCardToHand(player){
-    if(player === 1){
-        player1Hand.push(cardEl[chooseCard()]);
-    }
-    else if(player === 2){
-        player2Hand.push(cardEl[chooseCard()]);
     }
 }
 
