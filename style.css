@@ -104,7 +104,7 @@ main {
     align-items: center;
     border: solid black;
     width: 45vmin;
-    height: 55vmin;
+    height: 60vmin;
     background-color: grey;
     margin-right: 3vmin;
     
@@ -113,7 +113,7 @@ main {
 .indacc {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
-    height: 3.9vmin;
+    height: 3.8vmin;
     width: 35vmin;
     border: solid black;
     padding: 0.4vmin;
@@ -148,6 +148,11 @@ button {
 #hint {
     text-align: center;
 }
+
+#go {
+    margin-top: 4vmin
+}
+
 footer {
     background-color: #00acef;
     display: grid;

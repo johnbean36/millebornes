@@ -41,6 +41,7 @@ let p2Safety = 0;
 const HANDSIZE = 6;
 const DECKSIZE = 99;
 
+//Function to reset variables for next round
 function init() {
     buttonEl = document.getElementById("bu");
     buttonEl.disabled = true;
@@ -127,6 +128,7 @@ function newHand(player){
 
 }
 
+//function to calculate the winner based on their score
 function determineWinner(){
     //calculate player 1 round score
     player1RoundScore = player1RoundDistance;
@@ -175,6 +177,7 @@ function determineWinner(){
 
 }
 
+//sets a message for the player
 function playerMsg(message){
     pMessage.innerText = message;
 }
@@ -186,6 +189,7 @@ function nCardsPlayed(){
     }
 }
 
+//Adds a card to the players hand
 function addCardToHand(player){
     if(player === 1){
         player1Hand.push(cardEl[chooseCard()]);
@@ -234,6 +238,9 @@ p2rsLabel = document.getElementById('p2rs');
 pMessage = document.getElementById('playerMsg');
 
 discard = document.getElementById('discard');
+
+p1go = document.getElementById('p1go');
+p2go = document.getElementById('p2go');
 
 //Creating img objects to put card images into
 for( i in cardNumbers){
@@ -307,7 +314,9 @@ cardEl[count].setAttribute('src', './images/puncture_proof.png');
 count += 1;
 cardEl[count].setAttribute('src', './images/emergency_vehicle.png');
 
-//Drag and drop cards
+//A loop that sets every card to draggable, adds a dragstart listener to each card
+//to detect when a card is dragged and then sends the value of i, which in this case
+//represents the index of the card in the deck, to be caught by the drop function
 for (let i = 0; i < DECKSIZE; i++){
     cardEl[i].setAttribute('draggable', true);
     cardEl[i].addEventListener('dragstart', (e) => {
@@ -315,9 +324,16 @@ for (let i = 0; i < DECKSIZE; i++){
     });
 }
 
+//Stops the default behavior of the browser to prevent dropping of dragged objects
 discard.addEventListener('dragover', function(e){
     e.preventDefault();
 })
+
+
+//A drop event listener that receives the data from the dragstart event listener.
+//The data received from the dragover even listener is in a text form and has to be
+//typecasted to an integer to represent the index of the card.  Then it is sent to
+//the removeFromHand function to remove that card from the players hand.
 
 discard.addEventListener('drop', function(e){
     e.preventDefault();
@@ -326,14 +342,18 @@ discard.addEventListener('drop', function(e){
     if(turn === 1){
         removeFromHand(dCard, player1Hand);
         addCardToHand(1);
+        turn = 2;
         clearHand();
-        newHand(1);
+        newHand(2);
+        playerMsg("Player 2's turn");
     }
     else if(turn === 2){
         removeFromHand(dCard, player2Hand);
         addCardToHand(2);
+        turn = 1;
         clearHand();
-        newHand(2);
+        newHand(1);
+        playerMsg("Player 1's turn");
     }
 })
 
@@ -349,6 +369,7 @@ for( let i = 1; i <= 2; i++){
     }
 }
 
+//Event listener to listen for a card to be clicked, identifies which card is clicked and then executes the card logic for that card
 divEl.addEventListener('click', (e) => {
     const cardIndex = cardEl.indexOf(e.target);
     if(winner){
@@ -357,7 +378,7 @@ divEl.addEventListener('click', (e) => {
     else if (turn === 1){
         clearHand();
         newHand(turn);
-        if(cardIndex >= 82 && cardIndex <= 95){
+        if(cardIndex >= 82 && cardIndex <= 95){  //Go cards
             if(player1Go === true){
                 playerMsg("Go card has already been played");
                 return;
@@ -367,6 +388,7 @@ divEl.addEventListener('click', (e) => {
                 return;
             }
             player1Go = true;
+            p1go.setAttribute('src', './images/lighton');
             //turn on player1go light
             removeFromHand(cardEl[cardIndex], player1Hand);
             nCardsPlayed();
@@ -377,7 +399,7 @@ divEl.addEventListener('click', (e) => {
             playerMsg("Player 2 Turn");
             return;
         }
-        else if(cardIndex >= 0 && cardIndex <= 9){
+        else if(cardIndex >= 0 && cardIndex <= 9){  //25 mile cards
             if(!checkHazard(turn) && player1Go){
                 if((player1RoundDistance + 25) > 1000){
                     playerMsg("Distance will be greater than 1000");
@@ -410,7 +432,7 @@ divEl.addEventListener('click', (e) => {
             playerMsg("Player 2 Turn");
             return;
         }
-        else if(cardIndex >= 10 && cardIndex <= 19){
+        else if(cardIndex >= 10 && cardIndex <= 19){  //50 mile cards
             if(!checkHazard(turn) && player1Go){
                 if((player1RoundDistance + 50) > 1000){
                     playerMsg("Distance will be greater than 1000");
@@ -444,7 +466,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 20 && cardIndex <= 29){
             if(!checkHazard(turn) && player1Go){
-                if((player1RoundDistance + 75) > 1000){
+                if((player1RoundDistance + 75) > 1000){     //75 mile cards
                     playerMsg("Distance will be greater than 1000");
                     return;
                 }
@@ -477,7 +499,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 30 && cardIndex <= 41){
             if(!checkHazard(turn) && player1Go){
-                if((player1RoundDistance + 100) > 1000){
+                if((player1RoundDistance + 100) > 1000){   //100 mile cards
                     playerMsg("Distance will be greater than 1000");
                     return;
                 }
@@ -510,7 +532,7 @@ divEl.addEventListener('click', (e) => {
         }
         else if(cardIndex >= 42 && cardIndex <= 45){
             if(!checkHazard(turn) && player1Go){
-                if((player1RoundDistance + 200) > 1000){
+                if((player1RoundDistance + 200) > 1000){   //200 mile cards
                     playerMsg("Distance will be greater than 1000");
                     return;
                 }
@@ -618,7 +640,7 @@ divEl.addEventListener('click', (e) => {
                 return;
             }
             player2Go = false;
-            //turn player2go light to off
+            p2go.setAttribute('src', './images/light.png');
             nCardsPlayed();
             removeFromHand(cardEl[cardIndex], player1Hand);
             addCardToHand(turn);
@@ -757,7 +779,7 @@ divEl.addEventListener('click', (e) => {
     else if(turn === 2){
         clearHand();
         newHand(turn);
-        if(cardIndex >= 82 && cardIndex <= 95){
+        if(cardIndex >= 82 && cardIndex <= 95){  //Go cards
             if(player2Go === true){
                 playerMsg("Go card has already been played");
                 return;
@@ -767,6 +789,7 @@ divEl.addEventListener('click', (e) => {
                 return;
             }
             player2Go = true;
+            p2go.setAttribute('src', 'images/lighton.png');
             nCardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             addCardToHand(turn);
@@ -776,7 +799,7 @@ divEl.addEventListener('click', (e) => {
             playerMsg("Player 1 Turn");
             return;
         }
-        else if(cardIndex >= 0 && cardIndex <= 9){
+        else if(cardIndex >= 0 && cardIndex <= 9){  
             if(!checkHazard(turn) && player2Go){
                 if((player2RoundDistance + 25) > 1000){
                     playerMsg("Distance will be greater than 1000");
@@ -1014,7 +1037,7 @@ divEl.addEventListener('click', (e) => {
                 return;
             }
             player1Go = false;
-            //turn player2go light to off
+            p1go.setAttribute('src.', './images/light.png');
             nCardsPlayed();
             removeFromHand(cardEl[cardIndex], player2Hand);
             addCardToHand(turn);
