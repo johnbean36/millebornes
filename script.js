@@ -52,8 +52,8 @@ pSafety[0] = 0;
 pSafety[1] = 0;
 
 
-const HANDSIZE = 6;
-const DECKSIZE = 99;
+let handsize = 6;
+const DECKSIZE = 106;
 
 //Function to reset variables for next round
 function init() {
@@ -95,15 +95,26 @@ function init() {
 }
 
 //Cached elements
-for(i = 1; i <= HANDSIZE; i++){
+for(i = 1; i <= handsize; i++){
     cardHand.push(document.getElementById(`card${i}`));
 }
+const divEl = document.getElementById("hand");
+const p1rsLabel = document.getElementById('p1rs');
+const p2rsLabel = document.getElementById('p2rs');
+const pMessage = document.getElementById('tips');
+const discard = document.getElementById('discard');
+const p1go = document.getElementById('p1go');
+const p2go = document.getElementById('p2go');
+const buttonEl = document.getElementById("bu");
+buttonEl.disabled = true;
 
 //Removes the clicked card from the players hand
 function removeFromHand(cardIndex, player){
    handIndex = player.indexOf(cardIndex);
    player.splice(handIndex, 1);
 }
+
+//Functions
 
 //Function to choose a number from the deck of cards and returns that number
 function chooseCard(){
@@ -142,18 +153,18 @@ function checkHazard(player){
 
 //clears the cards from the divs
 function clearHand(){
-    for( let i = 0; i < HANDSIZE; i++){
+    for( let i = 0; i < handsize; i++){
         cardHand[i].removeChild(cardHand[i].firstChild);
     }
 }
 function newHand(player){
     if(player === 1){
-        for (let i = 0; i < HANDSIZE; i++) {
+        for (let i = 0; i < cardHand.length; i++) {
             cardHand[i].appendChild(playerHand[0][i]);
         }
     }
     else if(player === 2){
-        for (let i = 0; i < HANDSIZE; i++) {
+        for (let i = 0; i < cardHand.length; i++) {
             cardHand[i].appendChild(playerHand[1][i]);
         }
     }
@@ -206,7 +217,6 @@ function determineWinner(){
     else if(playerRoundScore[1] >= 5000){
         playerMsg("Player 2 has won")
     }
-
 }
 
 //sets a message for the player
@@ -215,7 +225,7 @@ function playerMsg(message){
 }
 
 function nCardsPlayed(){
-    if(cardsPlayed.length === 99){
+    if(cardsPlayed.length === DECKSIZE){
         winner = true;
         determineWinner();
     }
@@ -231,7 +241,494 @@ function addCardToHand(){
     }
 }
 
+//When a Go card is played this function is called
+function goCard(cardIndex){
+    let a = 0;
+    let pGo;
+    if(turn === 1){
+        a = 0;
+        pGo = document.getElementById("p1go");
+    }
+    else if(turn === 2){
+        a = 1;
+        pGo = document.getElementById("p2go");
+    }
+    if(playerGo[a] === true){
+        playerMsg("Go card has already been played");
+        return;
+    }
+    else if(checkHazard(turn)){
+        playerMsg("Clear the hazard first");
+        return;
+    }
+    else{
+        playerGo[a] = true;
+        pGo.setAttribute("src", "./images/lighton.png");
+        removeFromHand(cardEl[cardIndex], playerHand[a]);
+        nCardsPlayed();
+        addCardToHand();
+        if (turn === 1){
+            turn = 2;
+        }
+        else if( turn === 2){
+            turn = 1;
+        }
+        clearHand();
+        newHand(turn);
+        playerMsg(`Player ${turn}'s Turn`);
+        return;
+    }
+}
 
+//When a mile card is played this function is called
+function mileCard(cardIndex, mile){
+    let a = 0;
+    let prsLabel;
+    if(turn === 1){
+        a = 0;
+        prsLabel = document.getElementById('p1rd');
+    }
+    else if(turn === 2){
+        a = 1;
+        prsLabel = document.getElementById('p2rd');
+    }
+    if(!checkHazard(turn) && playerGo[a]){
+        if((playerRoundDistance[a] + mile) > 1000){
+            playerMsg("Distance will be greater than 1000");
+            return;
+        }
+        if(playerSpeedLimit[a] && mile > 50){
+            playerMsg("Play an End of Limit card");
+            return;
+        }
+        playerRoundDistance[a] += mile;
+        if(mile === 200){
+            playerDistance200[a] += 1;
+        }
+        prsLabel.innerText = playerRoundDistance[a];
+        nCardsPlayed();
+        if(playerRoundDistance[a] === 1000){
+            winner = true;
+            determineWinner();
+            return;
+        }
+        removeFromHand(cardEl[cardIndex], playerHand[a]);
+        addCardToHand();
+        if(turn === 1){
+            turn = 2;
+        }
+        else if(turn === 2){
+            turn = 1;
+        }
+        clearHand();
+        newHand(turn);
+        playerMsg(`Player ${turn}'s Turn`);
+        return;
+    }
+    else{
+        if(!playerGo[a]){
+            playerMsg("Play a Go card first");
+            return;
+        }
+        else if(checkHazard(turn)){
+            playerMsg("Play a remedy first");
+            return;
+        }
+    }
+}
+
+//when a hazard is played this function is called
+function hazardCard(cardIndex, hazardS){
+    let hazard = 0;
+    let a = 0;
+    let b = 0;
+    let hazardEl;
+
+    if(turn === 1){
+        a = 0;
+        hazard = 2;
+        b = 1;
+        if(hazardS === "accident"){
+            hazardEl = document.getElementById('p2a');
+        }
+        else if(hazardS === "flattire"){
+            hazardEl = document.getElementById('p2fl');
+        }
+        else if(hazardS === "outofgas"){
+            hazardEl = document.getElementById('p2o');
+        }
+        go = document.getElementById('p2go');
+    }
+    else if(turn === 2){
+        a = 1;
+        hazard = 1;
+        b = 0;
+        if(hazardS === "accident"){
+            hazardEl = document.getElementById('p1a');
+        }
+        else if(hazardS === "flattire"){
+            hazardEl = document.getElementById('p1fl');
+        }
+        else if(hazardS === "outofgas"){
+            hazardEl = document.getElementById('p1o');
+        }
+        go = document.getElementById('p1go');
+    }
+    if(checkHazard(hazard)){
+        playerMsg(`Player ${hazard} already has a hazard`);
+        return;
+    }
+    if(hazardS === "accident"){
+        if(playerDrivingAce[b]){
+            playerMsg(`Player ${hazard} has Driving Ace`);
+            return;
+        }
+        playerAccident[b] = true;
+    }
+    else if(hazardS === "flattire"){
+        if(playerPunctureProof[b]){
+            playerMsg(`Player ${hazard} has Fuel Truck`);
+            return;
+        }
+        playerFlatTire[b] = true;
+    }
+    else if(hazardS === 'outofgas'){
+        if(playerFuelTruck[b]){
+            playerMsg(`Player ${hazard} has Fuel Truck`);
+            return;
+        }
+        playerOutofGas[b] = true;
+    }
+    playerGo[b] = false;
+    hazardEl.setAttribute('src', './images/lighton.png');
+    go.setAttribute('src', './images/light.png');
+    nCardsPlayed();
+    removeFromHand(cardEl[cardIndex], playerHand[a]);
+    addCardToHand();
+    if(turn === 1){
+        turn = 2;
+    }
+    else if(turn === 2){
+        turn = 1;
+    }
+    clearHand();
+    newHand(turn);
+    playerMsg(`Player ${turn}'s Turn`);
+    return;
+}
+
+//When a Safety card is played this function is called
+function safetyS(cardIndex, safety){
+    let a = 0;
+    let hazardEl;
+    let hazard;
+    if(turn === 1){
+        a = 0;
+        b = 1;
+        if(safety === "ace"){
+            hazardEl = document.getElementById('p1ac');
+            acc = document.getElementById('p1a');
+        }
+        else if(safety === "proof"){
+            hazardEl = document.getElementById('pp1');
+            acc = document.getElementById('p1fl');
+        }
+        else if(safety === "gas"){
+            hazardEl = document.getElementById('p1t');
+            acc = document.getElementById('p1o');
+        }
+        else if(safety === "ev"){
+            hazardEl = document.getElementById('p1ev')
+            go = document.getElementById('p1go');
+            speed = document.getElementById('p1s');
+        }
+    }
+    else if(turn === 2){
+        a = 1;
+        b = 0;
+        if(safety === "ace"){
+            hazardEl = document.getElementById('p2ac');
+            acc = document.getElementById('p2a');
+        }
+        else if(safety === "proof"){
+            hazardEl = document.getElementById('pp2');
+            acc = document.getElementById('p2fl');
+        }
+        else if(safety === "fueltruck"){
+            hazardEl = document.getElementById('p2t');
+            acc = document.getElementById('p2o');
+        }
+        else if(safety === "ev"){
+            hazardEl = document.getElementById('p2ev')
+            go = document.getElementById('p2go');
+            speed = document.getElementById('p2s');
+        }
+    }
+    if(safety === "ace"){
+        playerDrivingAce[a] = true;
+        playerAccident[a] = false;
+        acc.setAttribute('src', '/images/light.png');
+        hazardEl.setAttribute('src', './images/lighton.png');
+    }
+    else if(safety === "proof"){
+        playerPunctureProof[a] = true;
+        playerFlatTire[a] = false;
+        acc.setAttribute('src', './images/light.png');
+        hazardEl.setAttribute('src', './images/lighton.png');
+    }
+    else if(safety === 'fueltruck'){
+        playerFuelTruck[a] = true;
+        playerOutofGas[a] = false;
+        acc.setAttribute('src', './images/light.png');
+        hazardEl.setAttribute('src', './images/lighton.png');
+    }
+    else if(safety === 'ev'){
+        playerEmergencyVehicle[a] = true;
+        playerGo[a] = true;
+        go.setAttribute('src', './images/lighton.png');
+        speed.setAttribute('src', './images/light.png');
+        hazardEl.setAttribute('src', './images/lighton.png');
+    }
+    pSafety[a] += 1;
+    nCardsPlayed();
+    removeFromHand(cardEl[cardIndex], playerHand[a]);
+    addCardToHand(turn);
+    if(turn === 1){
+        turn = 2;
+    }
+    else if(turn === 2){
+        turn = 1;
+    }
+    clearHand();
+    newHand(turn);
+    playerMsg(`Player ${turn} Turn`);
+    return;
+}
+
+//When a stop card is played this function is called
+function stop(cardIndex){
+    let hazard = 0;
+    let a = 0;
+    let b = 0;
+    let accidentL;
+    if (turn === 1){
+        a = 0;
+        hazard = 2;
+        b = 1;
+        accidentL = document.getElementById('p2go');
+    }
+    else if(turn === 2){
+        a = 1;
+        hazard = 1;
+        b = 0;
+        accidentL = document.getElementById('p1go');
+    }
+    if(checkHazard(hazard)){
+        playerMsg(`Player ${hazard} already has a hazard`);
+        return;
+    }
+    else if(playerEmergencyVehicle[b]){
+        playerMsg(`Player ${hazard} has Emergency Vehicle`);
+        return;
+    }
+    else if(!playerGo[b]){
+        playerMsg(`Player ${b} doesn't have a go card`);
+        return;
+    }
+    playerGo[b] = false;
+    accidentL.setAttribute('src', './images/light.png');
+    nCardsPlayed();
+    removeFromHand(cardEl[cardIndex], playerHand[a]);
+    addCardToHand();
+    if(turn === 1){
+        turn = 2;
+    }
+    else if(turn === 2){
+        turn = 1;
+    }
+    clearHand();
+    newHand(turn);
+    playerMsg(`Player ${turn}'s Turn`);
+    return;
+}
+
+//When a speed limit card is played this function is called
+function speedLimit(cardIndex){
+    let a = 0;
+    let b = 1;
+    let hazard;
+    let limitL;
+    if (turn === 1){
+        a = 0;
+        b = 1;
+        hazard = 2;
+        limitL = document.getElementById('p2s');
+    }
+    else if(turn === 2){
+        a = 1;
+        b = 0;
+        hazard = 1;
+        limitL = document.getElementById('p1s');
+    }
+    if(playerSpeedLimit[b]){
+        playerMsg(`Player ${hazard} already has a speed limit`);
+        return;
+    }
+    else if(playerEmergencyVehicle[b]){
+        playerMsg(`Player ${hazard} has Emergency Vehicle`);
+        return;
+    }
+    limitL.setAttribute('src', './images/lighton.png');
+    playerSpeedLimit[b] = true;
+    nCardsPlayed();
+    removeFromHand(cardEl[cardIndex], playerHand[a]);
+    addCardToHand();
+    if(turn === 1){
+        turn = 2;
+    }
+    else if(turn === 2){
+        turn = 1;
+    }
+    clearHand();
+    newHand(turn);
+    playerMsg(`Player ${turn} Turn`);
+    return;
+}
+
+//This function is played when a repairs card is clicked
+function repairs(cardIndex){
+    let a = 0;
+    let ace;
+    if(turn === 1){
+        a = 0;
+        ace = document.getElementById('p1a');
+    }
+    else if(turn === 2){
+        a = 1;
+        ace = document.getElementById('p2a');
+    }
+    if(!playerAccident[a]){
+        playerMsg("You didn't have an accident");
+        return;
+    }
+    ace.setAttribute('src', './images/light.png');
+    playerAccident[a] = false;
+    nCardsPlayed();
+    removeFromHand(cardEl[cardIndex], playerHand[a]);
+    addCardToHand();
+    if(turn === 1){
+        turn = 2;
+    }
+    else if(turn === 2){
+        turn = 1;
+    }
+    clearHand();
+    newHand(turn);
+    playerMsg(`Player ${turn} Turn`);
+    return;
+}
+
+//This function is called when a gas card is clicked
+function gasoline(cardIndex){
+    let a = 0;
+    let gas;
+    if(turn === 1){
+        a = 0;
+        gas = document.getElementById('p1o');
+    }
+    else if(turn === 2){
+        a = 1;
+        gas = document.getElementById('p2o');
+    }
+    if(!playerOutofGas[a]){
+        playerMsg("You aren't out of gas");
+        return;
+    }
+    gas.setAttribute('src', './images/light.png');
+    playerOutofGas[a] = false;
+    nCardsPlayed();
+    removeFromHand(cardEl[cardIndex], playerHand[a]);
+    addCardToHand();
+    if(turn === 1){
+        turn = 2;
+    }
+    else if(turn === 2){
+        turn = 1;
+    }
+    clearHand();
+    newHand(turn);
+    playerMsg(`Player ${turn} Turn`);
+    return;
+}
+
+//This function is called when a spare tire is clicked
+function spareTire(cardIndex){
+    let a = 0;
+    let tire;
+    if(turn === 1){
+        a = 0;
+        tire = document.getElementById('p1fl');
+    }
+    else if(turn === 2){
+        a = 1;
+        tire = document.getElementById('p2fl');
+    }
+    if(!playerFlatTire[a]){
+        playerMsg("You don't have a flat tire");
+        return;
+    }
+    tire.setAttribute('src', './images/light.png');
+    playerFlatTire[a] = false;
+    nCardsPlayed();
+    removeFromHand(cardEl[cardIndex], playerHand[a]);
+    addCardToHand();
+    if(turn === 1){
+        turn = 2;
+    }
+    else if(turn === 2){
+        turn = 1;
+    }
+    clearHand();
+    newHand(turn);
+    playerMsg(`Player ${turn} Turn`);
+    return;
+}
+
+//If the player has a speed limit active it removes their speed limit
+function endOfSpeed(cardIndex){
+    let a = 0;
+    let b = 0;
+    let limitL;
+    if (turn === 1){
+        a = 0;
+        b = 1;
+        limitL = document.getElementById('p1s');
+    }
+    else if(turn === 2){
+        a = 1;
+        b = 0;
+        limitL = document.getElementById('p2s');
+    }
+    if(!playerSpeedLimit[a]){
+        playerMsg("Player doesn't have a speed limit");
+        return;
+    }
+    limitL.setAttribute('src', './images/light.png');
+    playerSpeedLimit[a] = false;
+    nCardsPlayed();
+    removeFromHand(cardEl[cardIndex], playerHand[a]);
+    addCardToHand();
+    if(turn === 1){
+        turn = 2;
+    }
+    else if(turn === 2){
+        turn = 1;
+    }
+    clearHand();
+    newHand(turn);
+    playerMsg(`Player ${turn} Turn`);
+    return;
+}
 
 //Numbers of each type of card in Mille Bornes
 const cardNumbers = {
@@ -252,23 +749,9 @@ const cardNumbers = {
     drivingAce: 1,
     fuelTruck: 1,
     punctureProof: 1,
-    emergencyVehicle: 1
+    emergencyVehicle: 1,
+    endOfSpeedLimit: 6
 }
-
-const divEl = document.getElementById("hand");
-
-const p1rsLabel = document.getElementById('p1rs');
-const p2rsLabel = document.getElementById('p2rs');
-
-const pMessage = document.getElementById('tips');
-
-const discard = document.getElementById('discard');
-
-const p1go = document.getElementById('p1go');
-const p2go = document.getElementById('p2go');
-
-const buttonEl = document.getElementById("bu");
-buttonEl.disabled = true;
 
 //Creating img objects to put card images into
 for( i in cardNumbers){
@@ -340,6 +823,12 @@ cardEl[count].setAttribute('src', './images/fueltruck.png');
 count += 1;
 cardEl[count].setAttribute('src', './images/puncture_proof.png');
 count += 1;
+cardEl[count].setAttribute('src', './images/emergency_vehicle.png');
+count += 1;
+for(i = count; i < ((cardNumbers['endOfSpeedLimit']) + count); i++){
+    cardEl[i].setAttribute('src', './images/end_of_speedlimit.png');
+}
+
 //to detect when a card is dragged and then sends the value of i, which in this case
 //represents the index of the card in the deck, to be caught by the drop function
 for (let i = 0; i < DECKSIZE; i++){
@@ -384,7 +873,7 @@ discard.addEventListener('drop', function(e){
 
 //Randomly selection cards to place in the players hand
 for( let i = 1; i <= 2; i++){
-    for(let j = 0; j < HANDSIZE; j++){
+    for(let j = 0; j < handsize; j++){
         if(i === 1){
             playerHand[0].push(cardEl[chooseCard()]);
         }
@@ -394,534 +883,7 @@ for( let i = 1; i <= 2; i++){
     }
 }
 
-function goCard(cardIndex){
-    let a = 0;
-    let pGo;
-    if(turn === 1){
-        a = 0;
-        pGo = document.getElementById("p1go");
-    }
-    else if(turn === 2){
-        a = 1;
-        pGo = document.getElementById("p2go");
-    }
-    if(playerGo[a] === true){
-        playerMsg("Go card has already been played");
-        return;
-    }
-    else if(checkHazard(turn)){
-        playerMsg("Clear the hazard first");
-        return;
-    }
-    else{
-        playerGo[a] = true;
-        pGo.setAttribute("src", "./images/lighton.png");
-        removeFromHand(cardEl[cardIndex], playerHand[a]);
-        nCardsPlayed();
-        addCardToHand();
-        if (turn === 1){
-            turn = 2;
-        }
-        else if( turn === 2){
-            turn = 1;
-        }
-        clearHand();
-        newHand(turn);
-        playerMsg(`Player ${turn}'s Turn`);
-        return;
-    }
-}
 
-function mileCard(cardIndex, mile){
-    let a = 0;
-    let prsLabel;
-    if(turn === 1){
-        a = 0;
-        prsLabel = document.getElementById('p1d');
-    }
-    else if(turn === 2){
-        a = 1;
-        prsLabel = document.getElementById('p2d');
-    }
-    if(!checkHazard(turn) && playerGo[a]){
-        if((playerRoundDistance[a] + mile) > 1000){
-            playerMsg("Distance will be greater than 1000");
-            return;
-        }
-        if(playerSpeedLimit[a] && mile > 50){
-            playerMsg("Play an End of Limit card");
-            return;
-        }
-        playerRoundDistance[a] += mile;
-        if(mile === 200){
-            playerDistance200[a] += 1;
-        }
-        prsLabel.innerText = playerRoundDistance[a];
-        nCardsPlayed();
-        if(playerRoundDistance[a] === 1000){
-            winner = true;
-            determineWinner();
-            return;
-        }
-        removeFromHand(cardEl[cardIndex], playerHand[a]);
-        addCardToHand();
-        if(turn === 1){
-            turn = 2;
-        }
-        else if(turn === 2){
-            turn = 1;
-        }
-        clearHand();
-        newHand(turn);
-        playerMsg(`Player ${turn}'s Turn`);
-        return;
-    }
-    else{
-        if(!playerGo[a]){
-            playerMsg("Play a Go card first");
-            return;
-        }
-        else if(checkHazard(turn)){
-            playerMsg("Play a remedy first");
-            return;
-        }
-    }
-}
-
-function accident(cardIndex){
-    let hazard = 0;
-    let a = 0;
-    let b = 0;
-    let accidentL;
-    if (turn === 1){
-        a = 0;
-        hazard = 2;
-        b = 1;
-        accidentL = document.getElementById('p2a');
-        go = document.getElementById('p2go');
-    }
-    else if(turn === 2){
-        a = 1;
-        hazard = 1;
-        b = 0;
-        accidentL = document.getElementById('p1a');
-        go = document.getElementById('p1go');
-    }
-    if(checkHazard(hazard)){
-        playerMsg(`Player ${hazard} already has a hazard`);
-        return;
-    }
-    else if(playerDrivingAce[b]){
-        playerMsg(`Player ${hazard} has Driving Ace`);
-        return;
-    }
-    playerGo[b] = false;
-    accidentL.setAttribute('src', './images/lighton.png');
-    go.setAttribute('src', './images/light.png');
-    playerAccident[b] = true;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn}'s Turn`);
-    return;
-}
-
-function outOfGas(cardIndex){
-    let hazard = 0;
-    let a = 0;
-    let b = 0;
-    let accidentL;
-    if (turn === 1){
-        a = 0;
-        hazard = 2;
-        b = 1;
-        accidentL = document.getElementById('p2o');
-        go = document.getElementById('p2go');
-    }
-    else if(turn === 2){
-        a = 1;
-        hazard = 1;
-        b = 0;
-        accidentL = document.getElementById('p1o');
-        go = document.getElementById('p1go');
-    }
-    if(checkHazard(hazard)){
-        playerMsg(`Player ${hazard} already has a hazard`);
-        return;
-    }
-    else if(playerFuelTruck[b]){
-        playerMsg(`Player ${hazard} has Fuel Truck`);
-        return;
-    }
-    playerGo[b] = false;
-    accidentL.setAttribute('src', './images/lighton.png');
-    go.setAttribute('src', './images/light.png');
-    playerOutofGas[b] = true;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn}'s Turn`);
-    return;
-}
-
-function flatTire(cardIndex){
-    let hazard = 0;
-    let a = 0;
-    let b = 0;
-    let accidentL;
-    if (turn === 1){
-        a = 0;
-        hazard = 2;
-        b = 1;
-        accidentL = document.getElementById('p2fl');
-        go = document.getElementById('p2go');
-    }
-    else if(turn === 2){
-        a = 1;
-        hazard = 1;
-        b = 0;
-        accidentL = document.getElementById('p1fl');
-        go = document.getElementById('p1go');
-    }
-    if(checkHazard(hazard)){
-        playerMsg(`Player ${hazard} already has a hazard`);
-        return;
-    }
-    else if(playerPunctureProof[b]){
-        playerMsg(`Player ${hazard} has Puncture Proof`);
-        return;
-    }
-    playerGo[b] = false;
-    accidentL.setAttribute('src', './images/lighton.png');
-    go.setAttribute('src', './images/light.png');
-    playerFlatTire[b] = true;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn}'s Turn`);
-    return;
-}
-
-function stop(cardIndex){
-    let hazard = 0;
-    let a = 0;
-    let b = 0;
-    let accidentL;
-    if (turn === 1){
-        a = 0;
-        hazard = 2;
-        b = 1;
-        accidentL = document.getElementById('p2go');
-    }
-    else if(turn === 2){
-        a = 1;
-        hazard = 1;
-        b = 0;
-        accidentL = document.getElementById('p1go');
-    }
-    if(checkHazard(hazard)){
-        playerMsg(`Player ${hazard} already has a hazard`);
-        return;
-    }
-    else if(playerEmergencyVehicle[b]){
-        playerMsg(`Player ${hazard} has Emergency Vehicle`);
-        return;
-    }
-    else if(!playerGo[b]){
-        playerMsg(`Player ${b} doesn't have a go card`);
-        return;
-    }
-    playerGo[b] = false;
-    accidentL.setAttribute('src', './images/light.png');
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn}'s Turn`);
-    return;
-}
-
-function speedLimit(cardIndex){
-    let a = 0;
-    let b = 0;
-    let limitL;
-    if (turn === 1){
-        a = 0;
-        b = 1;
-        limitL = document.getElementById('p2s');
-    }
-    else if(turn === 2){
-        a = 1;
-        b = 0;
-        limitL = document.getElementById('p1s');
-    }
-    if(playerSpeedLimit[b]){
-        playerMsg(`Player ${b} already has a speed limit`);
-        return;
-    }
-    else if(playerEmergencyVehicle[b]){
-        playerMsg(`Player ${b} has Emergency Vehicle`);
-        return;
-    }
-    limitL.setAttribute('src', './images/lighton.png');
-    playerSpeedLimit[b] = true;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg("Player 2 Turn");
-    return;
-}
-
-function repairs(cardIndex){
-    let a = 0;
-    let ace;
-    if(turn === 1){
-        a = 0;
-        ace = document.getElementById('p1a');
-    }
-    else if(turn === 2){
-        a = 1;
-        ace = document.getElementById('p2a');
-    }
-    if(!playerAccident[a]){
-        playerMsg("You didn't have an accident");
-        return;
-    }
-    ace.setAttribute('src', './images/light.png');
-    playerAccident[a] = false;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn} Turn`);
-    return;
-}
-
-function gasoline(cardIndex){
-    let a = 0;
-    let gas;
-    if(turn === 1){
-        a = 0;
-        gas = document.getElementById('p1o');
-    }
-    else if(turn === 2){
-        a = 1;
-        gas = document.getElementById('p2o');
-    }
-    if(!playerOutofGas[a]){
-        playerMsg("You aren't out of gas");
-        return;
-    }
-    gas.setAttribute('src', './images/light.png');
-    playerOutofGas[a] = false;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn} Turn`);
-    return;
-}
-
-function spareTire(cardIndex){
-    let a = 0;
-    let tire;
-    if(turn === 1){
-        a = 0;
-        tire = document.getElementById('p1fl');
-    }
-    else if(turn === 2){
-        a = 1;
-        tire = document.getElementById('p2fl');
-    }
-    if(!playerFlatTire[a]){
-        playerMsg("You don't have a flat tire");
-        return;
-    }
-    tire.setAttribute('src', './images/light.png');
-    playerFlatTire[a] = false;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn} Turn`);
-    return;
-}
-
-function drivingAce(cardIndex){
-    let a = 0;
-    let ace;
-    if(turn === 1){
-        a = 0;
-        ace = document.getElementById('p1ac');
-    }
-    else if(turn === 2){
-        a = 1;
-        ace = document.getElementById('p2ac');
-    }
-    ace.setAttribute('src', './images/lighton.png');
-    playerDrivingAce[a] = true;
-    pSafety[a] += 1;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand(turn);
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn} Turn`);
-    return;
-}
-
-function fuelTruck(cardIndex){
-    let a = 0;
-    let fuel;
-    if(turn === 1){
-        a = 0;
-        fuel = document.getElementById('p1t');
-    }
-    else if(turn === 2){
-        a = 1;
-        fuel = document.getElementById('p2t');
-    }
-    fuel.setAttribute('src', './images/lighton.png');
-    playerFuelTruck[a] = true;
-    pSafety[a] += 1;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn} Turn`);
-    return;
-}
-
-function punctureProof(cardIndex){
-    let a = 0;
-    let puncture;
-    if(turn === 1){
-        a = 0;
-        puncture = document.getElementById('pp1');
-    }
-    else if(turn === 2){
-        a = 1;
-        puncture = document.getElementById('pp2');
-    }
-    puncture.setAttribute('src', './images/lighton.png');
-    playerPunctureProof[a] = true;
-    pSafety[a] += 1;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn} Turn`);
-    return;
-}
-
-function eVehicle(cardIndex){
-    let a = 0;
-    let vhicle;
-    if(turn === 1){
-        a = 0;
-        vehicle = document.getElementById('p1ev');
-    }
-    else if(turn === 2){
-        a = 1;
-        vehicle = document.getElementById('p2ev');
-    }
-    puncture.setAttribute('src', './images/lighton.png');
-    playerEmergencyVehicle[a] = true;
-    pSafety[a] += 1;
-    nCardsPlayed();
-    removeFromHand(cardEl[cardIndex], playerHand[a]);
-    addCardToHand();
-    if(turn === 1){
-        turn = 2;
-    }
-    else if(turn === 2){
-        turn = 1;
-    }
-    clearHand();
-    newHand(turn);
-    playerMsg(`Player ${turn} Turn`);
-    return;
-}
 
 //Event listener to listen for a card to be clicked, identifies which card is clicked and then executes the card logic for that card
 divEl.addEventListener('click', (e) => {
@@ -940,23 +902,23 @@ divEl.addEventListener('click', (e) => {
     else if(cardIndex >= 10 && cardIndex <= 19){  //50 mile cards
         mileCard(cardIndex, 50);
     }
-    else if(cardIndex >= 20 && cardIndex <= 29){
+    else if(cardIndex >= 20 && cardIndex <= 29){  //75 mile cards
         mileCard(cardIndex, 75);
     }
-    else if(cardIndex >= 30 && cardIndex <= 41){
+    else if(cardIndex >= 30 && cardIndex <= 41){    //100 mile cards
         mileCard(cardIndex, 100);
     }
-    else if(cardIndex >= 42 && cardIndex <= 45){
+    else if(cardIndex >= 42 && cardIndex <= 45){   //200 mile cards
         mileCard(cardIndex, 200);
     }
-    else if(cardIndex >= 46 && cardIndex <= 48){
-        accident(cardIndex);
+    else if(cardIndex >= 46 && cardIndex <= 48){    //accident cards
+        hazardCard(cardIndex, "accident");
     }
-    else if(cardIndex >= 49 && cardIndex <= 51){
-        outOfGas(cardIndex);
+    else if(cardIndex >= 49 && cardIndex <= 51){    //out of gas
+        hazardCard(cardIndex, "outofgas");
     }
-    else if(cardIndex >= 52 && cardIndex <= 54){
-        flatTire(cardIndex);
+    else if(cardIndex >= 52 && cardIndex <= 54){    
+        hazardCard(cardIndex, "flattire");
     }
     else if(cardIndex >= 55 && cardIndex <= 59){
         stop(cardIndex);
@@ -974,23 +936,28 @@ divEl.addEventListener('click', (e) => {
         spareTire(cardIndex);
     }
     else if(cardIndex === 96){
-        drivingAce(cardIndex);
+        safetyS(cardIndex, "ace");
     }
     else if(cardIndex === 97){
-        fuelTruck(cardIndex);
+        safetyS(cardIndex, "fueltruck");
     }
     else if(cardIndex === 98){
-        punctureProof(cardIndex);
+        safetyS(cardIndex, "proof");
     }
     else if(cardIndex === 99){
-        eVehicle(cardIndex);
+        safetyS(cardIndex, "ev");
+    }
+    else if(cardIndex >= 100 && cardIndex <= 105){
+        endOfSpeed(cardIndex);
     }
 });
 
-for (let i = 0; i < HANDSIZE; i++) {
+//Initialize the first hand of cards
+for (let i = 0; i < handsize; i++) {
     cardHand[i].appendChild(playerHand[0][i]);
 }
 
+//Button to reset the game
 buttonEl.addEventListener('click', () => {
     init();
     playerTotalScore[0] = 0;
