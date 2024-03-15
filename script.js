@@ -158,13 +158,17 @@ function clearHand(){
     }
 }
 function newHand(player){
+    if(cardsPlayed.length === 96){
+        winner = true;
+        determineWinner();
+    }
     if(player === 1){
-        for (let i = 0; i < cardHand.length; i++) {
+        for (let i = 0; i < playerHand[0].length; i++) {
             cardHand[i].appendChild(playerHand[0][i]);
         }
     }
     else if(player === 2){
-        for (let i = 0; i < cardHand.length; i++) {
+        for (let i = 0; i < playerHand[1].length; i++) {
             cardHand[i].appendChild(playerHand[1][i]);
         }
     }
@@ -217,6 +221,7 @@ function determineWinner(){
     else if(playerRoundScore[1] >= 5000){
         playerMsg("Player 2 has won")
     }
+    buttonEl.disabled = false;
 }
 
 //sets a message for the player
@@ -233,6 +238,9 @@ function nCardsPlayed(){
 
 //Adds a card to the players hand
 function addCardToHand(){
+    if(cardsPlayed === 106){
+        return;
+    }
     if(turn === 1){
         playerHand[0].push(cardEl[chooseCard()]);
     }
@@ -265,7 +273,7 @@ function goCard(cardIndex){
         playerGo[a] = true;
         pGo.setAttribute("src", "./images/lighton.png");
         removeFromHand(cardEl[cardIndex], playerHand[a]);
-        nCardsPlayed();
+        nCardsPlayed();            
         addCardToHand();
         if (turn === 1){
             turn = 2;
@@ -339,9 +347,9 @@ function mileCard(cardIndex, mile){
 
 //when a hazard is played this function is called
 function hazardCard(cardIndex, hazardS){
-    let hazard = 0;
-    let a = 0;
-    let b = 0;
+    let hazard;
+    let a;
+    let b;
     let hazardEl;
 
     if(turn === 1){
@@ -962,5 +970,5 @@ buttonEl.addEventListener('click', () => {
     init();
     playerTotalScore[0] = 0;
     playerTotalScore[1] = 0;
-    buttonEl.setAttribute('disabled', true);
+    buttonEl.disabled = false;
 })
